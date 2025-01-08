@@ -6,7 +6,7 @@ public class Coet {
 
     public Coet() {
         for (int i = 0; i < 4; i++) {
-            motors[i] = new Motor("Motor " + i);
+            motors[i] = new Motor(i);
             fils[i] = new Thread(motors[i]);
         }
     }
