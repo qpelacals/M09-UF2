@@ -11,6 +11,7 @@ public class Motor implements Runnable {
     public synchronized void setPotencia(int p) {
         if (p <= 10) {
             this.potenciaObjectiu = p;
+            run();
         } else {
             System.out.println("La potència límit és 10");
         }
@@ -32,5 +33,9 @@ public class Motor implements Runnable {
         } catch (InterruptedException e) {
             System.err.println("Motor " + id + " interromput!");
         }
+    }
+
+    public void start() {
+        run();
     }
 }

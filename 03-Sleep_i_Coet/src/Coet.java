@@ -2,19 +2,15 @@ import java.util.Scanner;
 
 public class Coet {
     private Motor[] motors = new Motor[4];
-    private Thread[] fils = new Thread[4];
 
     public Coet() {
         for (int i = 0; i < 4; i++) {
             motors[i] = new Motor(i);
-            fils[i] = new Thread(motors[i]);
         }
     }
 
     public void arranca() {
-        for (Thread fil : fils) {
-            fil.start();
-        }
+        for (Motor motor : motors) motor.start();
     }
 
     public void passaAPotencia(int p) {
@@ -29,7 +25,6 @@ public class Coet {
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.print("Introdueix la potència objectiu (0 per parar): ");
             int potencia = scanner.nextInt();
             coet.passaAPotencia(potencia);
             if (potencia == 0) {
