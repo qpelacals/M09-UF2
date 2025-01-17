@@ -9,14 +9,12 @@ public class Coet {
         }
     }
 
-    public void passaAPotencia(int p) {
-        for (Motor motor : motors) {
-            motor.setPotencia(p);
-        }
+    public void arranca() {
+        for (Motor motor : motors) motor.start();
     }
 
-    public void passaaPotencias(int p) {
-        if (p <= 10 && p >= 0) {
+    public void passaAPotencia(int p) {
+        if (p <= 10) {
             for (Motor motor : motors) {
                 motor.setPotencia(p);
             }
@@ -25,23 +23,17 @@ public class Coet {
         }
     }
 
-    public void startAll() {
-        for (Motor motor : motors) {
-            motor.start();
-        }
-    }
-
     public static void main(String[] args) {
         Coet coet = new Coet();
+        coet.arranca();
 
         Scanner scanner = new Scanner(System.in);
-        int potencia = scanner.nextInt();
-        coet.passaaPotencias(potencia);
-        coet.startAll();
-
-        while (potencia != 0) {
-            potencia = scanner.nextInt();
-            coet.passaaPotencias(potencia);
+        while (true) {
+            int potencia = scanner.nextInt();
+            coet.passaAPotencia(potencia);
+            if (potencia == 0) {
+                break;
+            }
         }
         scanner.close();
     }
