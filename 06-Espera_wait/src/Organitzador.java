@@ -1,12 +1,12 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class Organitzador {
-    private Esdeveniment esdeveniment;
-
-    public Organitzador(Esdeveniment esdeveniment) {
-        this.esdeveniment = esdeveniment;
-    }
-
-    public void iniciarEsdeveniment() {
-        System.out.println("Organitzador: Iniciant l'esdeveniment...");
-        esdeveniment.iniciar();
+    public static void main(String[] args) {
+        Esdeveniment esdeveniment = new Esdeveniment(5);
+        for (int i = 0; i < 10; i++) {
+            new Assistent("Assistent-" + i, esdeveniment).start();
+        }
     }
 }

@@ -1,26 +1,35 @@
-public class Assistent implements Runnable {
-    private String nom;
-    private Esdeveniment esdeveniment;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+class Assistent extends Thread {
+    private final String nom;
+    private final Esdeveniment esdeveniment;
+    private final Random random = new Random();
 
     public Assistent(String nom, Esdeveniment esdeveniment) {
         this.nom = nom;
         this.esdeveniment = esdeveniment;
     }
 
-    @Override
-    public void run() {
-        try {
-            System.out.println(nom + ": Esperant que comenci l'esdeveniment...");
-            participarEsdeveniment();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+    public String getNom() {
+        return nom;
     }
 
-    private synchronized void participarEsdeveniment() throws InterruptedException {
-        while (!esdeveniment.isActiu()) {
-            wait(); // Espera fins que l'esdeveniment comenci
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                Thread.sleep(random.nextInt(1001)); // Espera entre 0 i 1 segon
+                if (random.nextBoolean()) {
+                    esdeveniment.ferReserva(this);
+                } else {
+                    esdeveniment.cancelaReserva(this);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
         }
-        System.out.println(nom + ": L'esdeveniment ha començat! Participància...");
     }
 }
