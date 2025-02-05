@@ -17,8 +17,8 @@ En aquest cas, és més probable que les places disponibles augmentin, ja que hi
 ## 3. Per què creus que fa falta la llista i no valdria només amb una variable sencera de reserves?
 La llista assistents és necessària perquè permet gestionar de manera individual les reserves de cada assistent. Si només s'utilitzés una variable sencera per comptar les places disponibles, no es podria:
 
-Verificar si un assistent ja ha fet una reserva: La llista permet comprovar si un assistent ja està a la llista abans d'afegir-lo, evitant duplicats.
+`Verificar si un assistent ja ha fet una reserva`: La llista permet comprovar si un assistent ja està a la llista abans d'afegir-lo, evitant duplicats.
 
-Cancel·lar reserves de manera específica: La llista permet eliminar un assistent concret quan cancel·la la seva reserva. Amb una variable sencera, no es podria saber quins assistents han fet reserves.
+`Cancel·lar reserves de manera específica`: La llista permet eliminar un assistent concret quan cancel·la la seva reserva. Amb una variable sencera, no es podria saber quins assistents han fet reserves.
 
-Notificar als assistents en espera: La llista ajuda a gestionar qui està esperant i qui ha de ser notificat quan es cancel·la una reserva.
+`Notificar als assistents en espera`: La llista ajuda a gestionar qui està esperant i qui ha de ser notificat quan es cancel·la una reserva.
