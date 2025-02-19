@@ -2,39 +2,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Taula {
-    private List<Filòsof> filòsofs;
+    private List<Filosof> comensals;
     private List<Forquilla> forquilles;
 
-    public Taula(int numFilòsofs) {
-        filòsofs = new ArrayList<>();
-        forquilles = new ArrayList<>();
+    public Taula(int comensals) {
+        this.comensals = new ArrayList<>();
+        this.forquilles = new ArrayList<>();
 
-        for (int i = 0; i < numFilòsofs; i++) {
-            forquilles.add(new Forquilla(i));
+        // Creem les forquilles primer
+        for (int i = 0; i < comensals; i++) {
+            this.forquilles.add(new Forquilla(i));
         }
 
-        for (int i = 0; i < numFilòsofs; i++) {
-            Filòsof filòsof = new Filòsof("fil" + i, forquilles.get(i), forquilles.get((i + 1) % numFilòsofs));
-            filòsofs.add(filòsof);
+        // Ara afegim els filòsofs
+        for (int i = 0; i < comensals; i++) {
+            Filosof f = new Filosof("Filosof " + i);
+            f.forquillaEsquerra = this.forquilles.get(i);
+            f.forquillaDreta = this.forquilles.get((i + 1) % comensals);
+            this.comensals.add(f);
         }
     }
 
     public void showTaula() {
-        for (Filòsof filòsof : filòsofs) {
-            System.out.println("Comensal:" + filòsof.getNom() + " esq:" + filòsof.getForquillaEsquerra().getNumero() +
-                    " dret:" + filòsof.getForquillaDreta().getNumero());
+        for (int i = 0; i < comensals.size(); i++) {
+            System.out.println(comensals.get(i).getName() + " - esq: " + comensals.get(i).forquillaEsquerra.getId()
+                    + " dret: " + comensals.get(i).forquillaDreta.getId());
         }
     }
 
-    public void cridaraTaula() {
-        for (Filòsof filòsof : filòsofs) {
-            new Thread(filòsof).start();
+    public void cridarATaula() {
+        for (int i = 0; i < comensals.size(); i++) {
+            comensals.get(i).start();
         }
     }
 
     public static void main(String[] args) {
         Taula taula = new Taula(4);
         taula.showTaula();
-        taula.cridaraTaula();
+        taula.cridarATaula();
     }
 }

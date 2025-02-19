@@ -1,74 +1,90 @@
 import java.util.Random;
 
-public class Filòsof implements Runnable {
-    private String nom;
-    private Forquilla forquillaEsquerra;
-    private Forquilla forquillaDreta;
-    private int gana;
-    private Random random;
+class Filosof extends Thread {
+    public Forquilla forquillaDreta;
+    public Forquilla forquillaEsquerra;
+    public int gana;
 
-    public Filòsof(String nom, Forquilla forquillaEsquerra, Forquilla forquillaDreta) {
-        this.nom = nom;
-        this.forquillaEsquerra = forquillaEsquerra;
-        this.forquillaDreta = forquillaDreta;
-        this.gana = 0;
-        this.random = new Random();
+    public Filosof(String nom) {
+        super(nom);
+        gana = 0;
     }
 
-    public String getNom() {
-        return nom;
-    }
+    public void menjar() {
+        while (true) {
+            boolean menjat = false;
 
-    public Forquilla getForquillaEsquerra() {
-        return forquillaEsquerra;
-    }
+            // Agafem la forquilla esquerra si està lliure
+            if (!forquillaEsquerra.isEnUs()) {
+                forquillaEsquerra.setEnUs(true);
+                System.out.printf("%s agafa la forquilla esquerra(%d)%n", getName(), forquillaEsquerra.getId());
 
-    public Forquilla getForquillaDreta() {
-        return forquillaDreta;
-    }
+                // Ara intentem agafar la dreta
+                if (!forquillaDreta.isEnUs()) {
+                    forquillaDreta.setEnUs(true);
+                    System.out.printf("%s agafa la forquilla dreta(%d)%n", getName(), forquillaDreta.getId());
 
-    private void menjar() throws InterruptedException {
-        synchronized (forquillaEsquerra) {
-            System.out.println("Filòsof: " + nom + " agafa la forquilla esquerra " + forquillaEsquerra.getNumero());
-            synchronized (forquillaDreta) {
-                System.out.println("Filòsof: " + nom + " agafa la forquilla dreta " + forquillaDreta.getNumero());
-                System.out.println("Filòsof: " + nom + " menja");
-                int tempsMenjant = random.nextInt(1000) + 1000; // Entre 1s i 2s
-                Thread.sleep(tempsMenjant);
-                gana = 0;
-                System.out.println("Filòsof: " + nom + " ha acabat de menjar");
+                    // Ara menjem
+                    System.out.println(getName() + " menja");
+                    gana = 0;
+
+                    Random rnd = new Random();
+                    int temps = 1200 + rnd.nextInt(800); // Entre 1.2s i 2s
+                    try {
+                        sleep(temps);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    // Deixem les forquilles després de menjar
+                    forquillaDreta.setEnUs(false);
+                    forquillaEsquerra.setEnUs(false);
+
+                    // Confirmació de que ha acabat
+                    System.out.println(getName() + " ha acabat de menjar");
+                    menjat = true;
+                } else {
+                    // No pot menjar, alliberem la forquilla esquerra i esperem
+                    System.out.printf("%s deixa l'esquerra(%d) i espera (dreta ocupada)%n", getName(), forquillaEsquerra.getId());
+                    forquillaEsquerra.setEnUs(false);
+                }
+            }
+
+            // Si no ha menjat, augmentem la gana i esperem
+            if (!menjat) {
+                gana++;
+                System.out.printf("%s gana=%d%n", getName(), gana);
+
+                // Espera entre 0,7s i 1,2s per fer-lo diferent
+                Random rnd = new Random();
+                int espera = 700 + rnd.nextInt(500);
+                try {
+                    sleep(espera);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                break;
             }
         }
     }
 
-    private void pensar() throws InterruptedException {
-        System.out.println("Filòsof: " + nom + " pensant");
-        int tempsPensant = random.nextInt(1000) + 1000; // Entre 1s i 2s
-        Thread.sleep(tempsPensant);
+    public void pensar() {
+        Random rnd = new Random();
+        int temps = 900 + rnd.nextInt(1100); // Entre 0.9s i 2s
+        try {
+            sleep(temps);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(getName() + " pensa");
     }
 
     @Override
     public void run() {
-        try {
-            while (true) {
-                pensar();
-                while (true) {
-                    if (forquillaEsquerra.isEnUs() || forquillaDreta.isEnUs()) {
-                        gana++;
-                        System.out.println("Filòsof: " + nom + " deixa l'esquerra(" + forquillaEsquerra.getNumero() +
-                                ") i espera (dreta ocupada)");
-                        System.out.println("Filòsof: " + nom + " gana=" + gana);
-                        int tempsEspera = random.nextInt(500) + 500; // Entre 0,5s i 1s
-                        Thread.sleep(tempsEspera);
-                    } else {
-                        break;
-                    }
-                }
-                menjar();
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.out.println("Filòsof: " + nom + " interromput");
+        while (true) {
+            menjar();
+            pensar();
         }
     }
 }

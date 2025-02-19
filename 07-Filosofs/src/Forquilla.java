@@ -1,14 +1,18 @@
-public class Forquilla {
-    private int numero;
+class Forquilla {
+    private int id;
     private boolean enUs;
 
-    public Forquilla(int numero) {
-        this.numero = numero;
-        this.enUs = false;
+    public Forquilla(int id) {
+        this.id = id;
+        enUs = false;
     }
 
-    public int getNumero() {
-        return numero;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public boolean isEnUs() {
