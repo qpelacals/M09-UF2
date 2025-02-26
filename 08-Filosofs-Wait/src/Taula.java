@@ -2,42 +2,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Taula {
-    private List<Filosof> comensals;
+    private List<Filosof> filosofs;
     private List<Forquilla> forquilles;
 
-    public Taula(int comensals) {
-        this.comensals = new ArrayList<>();
-        this.forquilles = new ArrayList<>();
+    public Taula(int numFilosofs) {
+        filosofs = new ArrayList<>();
+        forquilles = new ArrayList<>();
 
-        // Creem les forquilles primer
-        for (int i = 0; i < comensals; i++) {
-            this.forquilles.add(new Forquilla(i));
+        // Crear forquilles
+        for (int i = 0; i < numFilosofs; i++) {
+            forquilles.add(new Forquilla(i));
         }
 
-        // Ara afegim els filòsofs
-        for (int i = 0; i < comensals; i++) {
-            Filosof f = new Filosof("Filosof " + i);
-            f.forquillaEsquerra = this.forquilles.get(i);
-            f.forquillaDreta = this.forquilles.get((i + 1) % comensals);
-            this.comensals.add(f);
+        // Crear filòsofs i assignar forquilles
+        for (int i = 0; i < numFilosofs; i++) {
+            Filosof filosof = new Filosof(i);
+            Forquilla esquerra = forquilles.get(i);
+            Forquilla dreta = forquilles.get((i + 1) % numFilosofs);
+            filosof.setForquilles(esquerra, dreta);
+            filosofs.add(filosof);
         }
     }
 
     public void showTaula() {
-        for (int i = 0; i < comensals.size(); i++) {
-            System.out.println(comensals.get(i).getName() + " - esq: " + comensals.get(i).forquillaEsquerra.getId()
-                    + " dret: " + comensals.get(i).forquillaDreta.getId());
+        System.out.println("\nEstat de la taula:");
+        for (Filosof filosof : filosofs) {
+            System.out.println("Filòsof " + filosof.getId() + " té les forquilles " +
+                    filosof.getForquillaEsquerra().getId() + " i " + filosof.getForquillaDreta().getId());
         }
     }
 
     public void cridarATaula() {
-        for (int i = 0; i < comensals.size(); i++) {
-            comensals.get(i).start();
+        for (Filosof filosof : filosofs) {
+            filosof.start();
         }
     }
 
     public static void main(String[] args) {
-        Taula taula = new Taula(4);
+        int numFilosofs = 5;
+        Taula taula = new Taula(numFilosofs);
         taula.showTaula();
         taula.cridarATaula();
     }
