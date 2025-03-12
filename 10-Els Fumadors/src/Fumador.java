@@ -3,6 +3,9 @@ import java.util.Random;
 class Fumador extends Thread {
     private final Estanc estanc;
     private final int id;
+    private Tabac tabac = null;
+    private Llumi llumi = null;
+    private Paper paper = null;
     private int fumades = 0;
 
     public Fumador(Estanc estanc, int id) {
@@ -10,29 +13,56 @@ class Fumador extends Thread {
         this.id = id;
     }
 
-    public void run() {
+    public void compraTabac() {
         try {
-            while (fumades < 3) {
-                System.out.println("Fumador " + id + " comprant Tabac");
-                Tabac tabac = estanc.venTabac();
-
-                System.out.println("Fumador " + id + " comprant Paper");
-                Paper paper = estanc.venPaper();
-
-                System.out.println("Fumador " + id + " comprant Llumí");
-                Llumi llumi = estanc.venLlumi();
-
-                fuma();
-            }
+            System.out.println("Fumador " + id + " comprant Tabac");
+            tabac = estanc.venTabac();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }
 
-    private void fuma() throws InterruptedException {
-        System.out.println("Fumador " + id + " fumant");
-        Thread.sleep(500 + new Random().nextInt(500));
-        fumades++;
-        System.out.println("Fumador " + id + " ha fumat " + fumades + " vegades");
+    public void compraLlumi() {
+        try {
+            System.out.println("Fumador " + id + " comprant Llumí");
+            llumi = estanc.venLlumi();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    public void compraPaper() {
+        try {
+            System.out.println("Fumador " + id + " comprant Paper");
+            paper = estanc.venPaper();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    public void fuma() {
+        if (tabac != null && llumi != null && paper != null) {
+            System.out.println("Fumador " + id + " fumant");
+            try {
+                Thread.sleep(500 + new Random().nextInt(501));
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            fumades++;
+            System.out.println("Fumador " + id + " ha fumat " + fumades + " vegades");
+            tabac = null;
+            llumi = null;
+            paper = null;
+        }
+    }
+
+    @Override
+    public void run() {
+        while (fumades < 3) {
+            if (tabac == null) compraTabac();
+            if (llumi == null) compraLlumi();
+            if (paper == null) compraPaper();
+            fuma();
+        }
     }
 }
