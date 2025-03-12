@@ -30,18 +30,20 @@ public class Filosof implements Runnable {
     private void agafarForquilles() {
         forquillaEsquerra.agafar();
         forquillaDreta.agafar();
+        System.out.println("Fil" + num + ": té forquilles esq(" + forquillaEsquerra.getNum() + ") dreta (" + forquillaDreta.getNum() + ")");
     }
 
     private void deixarForquilles() {
         forquillaDreta.deixar();
         forquillaEsquerra.deixar();
+        System.out.println("Fil" + num + ": deixa les forquilles");
     }
 
     private void menjar() {
         agafarForquilles();
         fiGana = (int) System.currentTimeMillis() / 1000;
-        gana = fiGana - iniciGana;
-        System.out.println("Fil" + num + " menja amb gana " + gana);
+        calcularGana();
+        System.out.println("Fil" + num + ": menja amb gana " + gana);
         try {
             Thread.sleep(random.nextInt(1000) + 1000); // Menja entre 1s i 2s
         } catch (InterruptedException e) {
@@ -51,8 +53,11 @@ public class Filosof implements Runnable {
         deixarForquilles();
     }
 
+    private void calcularGana() {gana = fiGana - iniciGana;}
+
     private void pensar() {
         iniciGana = (int) System.currentTimeMillis() / 1000;
+        System.out.println("Fil" + num + ": pensant...");
         try {
             Thread.sleep(random.nextInt(1000) + 1000); // Pensa entre 1s i 2s
         } catch (InterruptedException e) {
@@ -63,6 +68,7 @@ public class Filosof implements Runnable {
     private void resetGana() {
         iniciGana = 0;
         gana = 0;
+        System.out.println("Fil" + num + ": ha acabat de menjar");
     }
 
     @Override

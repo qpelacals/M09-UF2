@@ -1,9 +1,9 @@
 public class Taula {
-    private Filosof[] filosofs;
+    private Filosof[] comensals;
     private Forquilla[] forquilles;
 
     public Taula(int numFilosofs) {
-        filosofs = new Filosof[numFilosofs];
+        comensals = new Filosof[numFilosofs];
         forquilles = new Forquilla[numFilosofs];
 
         for (int i = 0; i < numFilosofs; i++) {
@@ -11,18 +11,18 @@ public class Taula {
         }
 
         for (int i = 0; i < numFilosofs; i++) {
-            filosofs[i] = new Filosof(i, forquilles[i], forquilles[(i + 1) % numFilosofs]);
+            comensals[i] = new Filosof(i, forquilles[i], forquilles[(i + 1) % numFilosofs]);
         }
     }
 
     public void showTaula() {
-        for (Filosof filosof : filosofs) {
+        for (Filosof filosof : comensals) {
             System.out.println("Comensal:Fil" + filosof.getNum() + " esq:" + filosof.getForquillaEsquerra().getNum() + " dret:" + filosof.getForquillaDreta().getNum());
         }
     }
 
     public void cridaraTaula() {
-        for (Filosof filosof : filosofs) {
+        for (Filosof filosof : comensals) {
             new Thread(filosof).start();
         }
     }
